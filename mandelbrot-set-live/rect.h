@@ -16,11 +16,17 @@ namespace gp {
 		
 		void render() noexcept;
 		
+		inline void update_scale(double delta) noexcept {
+			m_scale += delta;
+		}
+		
 	private:
 		
 		std::shared_ptr <Shader> m_shader;
 		
 		unsigned int m_vao, m_vbo, m_ebo;
+		
+		double m_scale;
 		
 	};
 	

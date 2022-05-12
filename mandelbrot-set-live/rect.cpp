@@ -13,7 +13,8 @@ namespace gp {
 	m_shader(_shader),
 	m_vao(0),
 	m_vbo(0),
-	m_ebo(0)
+	m_ebo(0),
+	m_scale(1)
 	{
 		static const float_t vertices[2 * 4] = {
 			-1.0f, -1.0f,
@@ -59,15 +60,15 @@ namespace gp {
 		glBindVertexArray(m_vao);
 		
 		glm::mat4 proj = glm::ortho(
-		-float(framebuffer_width) * 0.5f, float(framebuffer_width) * 0.5f,
-		-float(framebuffer_height) * 0.5f, float(framebuffer_height) * 0.5f,
+		-float(framebuffer_width) * 0.5f * (float) m_scale, float(framebuffer_width) * 0.5f * (float) m_scale,
+		-float(framebuffer_height) * 0.5f * (float) m_scale, float(framebuffer_height) * 0.5f * (float) m_scale,
 		-1.0f, 1.0f
 		);
 		m_shader->set_uniform_mat4("u_proj", proj);
 		
 		glm::mat4 model(1.0f);
 		model = glm::scale(model,
-		glm::vec3(float(framebuffer_width) * 0.5f, float(framebuffer_height) * 0.5f, 1.0f));
+		glm::vec3(float(framebuffer_width) * 0.5f * m_scale, float(framebuffer_height) * 0.5f * m_scale, 1.0f));
 		m_shader->set_uniform_mat4("u_model", model);
 		
 		m_shader->set_uniform_1f("u_height", framebuffer_height);

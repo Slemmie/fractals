@@ -19,6 +19,9 @@ namespace gp {
 	
 	std::shared_mutex mutex;
 	
+	double scroll_delta = 0;
+	double total_scroll = 1;
+	
 	void init() noexcept {
 		std::unique_lock lock(mutex);
 		
@@ -69,6 +72,17 @@ namespace gp {
 			glViewport(0, 0, framebuffer_width = width, framebuffer_height = height);
 			glfwGetWindowSize(w_handle, &window_width, &window_height);
 		});
+		
+		glfwSetScrollCallback(window_handle,
+		[] (GLFWwindow* w_handle, double x_offset, double y_offset) -> void {
+			std::unique_lock local_lock(mutex);
+			
+			double delta = y_offset * total_scroll * 0.1;
+			
+			total_scroll -= delta;
+			
+			scroll_delta -= delta;
+		});
 	}
 	
 	void terminate() noexcept {
@@ -96,6 +110,32 @@ namespace gp {
 		std::unique_lock lock(mutex);
 		
 		glfwSetWindowTitle(window_handle, title.c_str());
+	}
+	
+	bool is_pressed() noexcept {
+		return glfwGetMouseButton(window_handle, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
+	}
+	
+	double mouse_x() noexcept {
+		double x, y;
+		glfwGetCursorPos(window_handle, &x, &y);
+		return x;
+	}
+	
+	double mouse_y() noexcept {
+		double x, y;
+		glfwGetCursorPos(window_handle, &x, &y);
+		return y;
+	}
+	
+	double pop_scroll_delta() noexcept {
+		double result = scroll_delta;
+		scroll_delta = 0;
+		return result;
+	}
+	
+	double get_total_scroll() noexcept {
+		return total_scroll;
 	}
 	
 } /// namespace gp

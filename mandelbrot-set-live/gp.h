@@ -14,4 +14,11 @@ namespace gp {
 	
 	void set_window_title(const std::string& title) noexcept;
 	
+	bool is_pressed() noexcept;
+	double mouse_x() noexcept;
+	double mouse_y() noexcept;
+	
+	double pop_scroll_delta() noexcept;
+	double get_total_scroll() noexcept;
+	
 } /// namespace gp
