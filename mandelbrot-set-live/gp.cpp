@@ -61,6 +61,14 @@ namespace gp {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
 		glfwSwapInterval(0);
+		
+		glfwSetFramebufferSizeCallback(window_handle,
+		[] (GLFWwindow* w_handle, int width, int height) -> void {
+			std::unique_lock local_lock(mutex);
+			
+			glViewport(0, 0, framebuffer_width = width, framebuffer_height = height);
+			glfwGetWindowSize(w_handle, &window_width, &window_height);
+		});
 	}
 	
 	void terminate() noexcept {
@@ -82,6 +90,12 @@ namespace gp {
 		}
 		
 		glfwTerminate();
+	}
+	
+	void set_window_title(const std::string& title) noexcept {
+		std::unique_lock lock(mutex);
+		
+		glfwSetWindowTitle(window_handle, title.c_str());
 	}
 	
 } /// namespace gp
