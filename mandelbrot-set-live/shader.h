@@ -23,25 +23,25 @@ namespace gp {
 		
 	public:
 		
-		Shader();
+		Shader() noexcept;
 		
-		~Shader();
+		~Shader() noexcept;
 		
 		// bind the program for use
-		void bind() const;
+		void bind() const noexcept;
 		// unbind the program
-		void unbind() const;
+		void unbind() const noexcept;
 		
 		// get the program id
-		constexpr unsigned int pid() const {
+		constexpr unsigned int pid() const noexcept {
 			return m_pid;
 		}
 		
 		// add a glsl source before compiling
-		void add_source(Shader_type shader_type, const std::string& source_path);
+		void add_source(Shader_type shader_type, const std::string& source_path) noexcept;
 		
 		// compile and link the added sources
-		void assemble();
+		void assemble() noexcept;
 		
 		// uniform setters
 		#include "shader_uniform_func_decl.hpp"
@@ -64,17 +64,17 @@ namespace gp {
 		
 		// get uniform location by querying the location table
 		// or externally probing the result and populating the location table if needed
-		int m_get_uniform_location(const std::string& uniform_name);
+		int m_get_uniform_location(const std::string& uniform_name) noexcept;
 		
 		// compile a single shader source and return the id
-		unsigned int m_compile_source(unsigned int shader_type, const std::string& source) const;
+		unsigned int m_compile_source(unsigned int shader_type, const std::string& source) const noexcept;
 		
 		// utility for reading a shader source into a buffer
-		std::string m_read_source(const std::string& source_path) const;
+		std::string m_read_source(const std::string& source_path) const noexcept;
 		
 		// utility for error logging
-		std::string m_shader_type_string(const unsigned int shader_type) const;
-		std::string m_shader_type_string(const Shader_type shader_type) const;
+		std::string m_shader_type_string(const unsigned int shader_type) const noexcept;
+		std::string m_shader_type_string(const Shader_type shader_type) const noexcept;
 		
 	};
 	

@@ -11,19 +11,19 @@
 
 namespace gp {
 	
-	Shader::Shader() :
+	Shader::Shader() noexcept :
 	m_pid(0),
 	m_assembled(false)
 	{ }
 	
-	Shader::~Shader() {
+	Shader::~Shader() noexcept {
 		if (m_pid) {
 			glDeleteProgram(m_pid);
 			m_pid = 0;
 		}
 	}
 	
-	void Shader::bind() const {
+	void Shader::bind() const noexcept {
 		// only use program if it exists
 		if (!m_pid) {
 			std::cerr << "[warning]: attempted to bind an unassembled shader program" << std::endl;
@@ -33,11 +33,11 @@ namespace gp {
 		glUseProgram(m_pid);
 	}
 	
-	void Shader::unbind() const {
+	void Shader::unbind() const noexcept {
 		glUseProgram(0);
 	}
 	
-	void Shader::add_source(Shader_type shader_type, const std::string& source_path) {
+	void Shader::add_source(Shader_type shader_type, const std::string& source_path) noexcept {
 		// do not allow adding new sources if the program has already been assembled
 		if (m_assembled) {
 			std::cerr <<
@@ -62,7 +62,7 @@ namespace gp {
 		}
 	}
 	
-	void Shader::assemble() {
+	void Shader::assemble() noexcept {
 		// do not allow re-assembling
 		if (m_assembled) {
 			std::cerr <<
@@ -113,7 +113,7 @@ namespace gp {
 		m_assembled = true;
 	}
 	
-	int Shader::m_get_uniform_location(const std::string& uniform_name) {
+	int Shader::m_get_uniform_location(const std::string& uniform_name) noexcept {
 		// do not allow querying for uniform location before the program exists
 		if (!m_pid) {
 			std::cerr << "[warning]: attempted to query a uniform location '" <<
@@ -131,7 +131,7 @@ namespace gp {
 		return m_uniform_location_table[uniform_name] = glGetUniformLocation(m_pid, uniform_name.c_str());
 	}
 	
-	unsigned int Shader::m_compile_source(unsigned int shader_type, const std::string& source) const {
+	unsigned int Shader::m_compile_source(unsigned int shader_type, const std::string& source) const noexcept {
 		// obtain the id
 		unsigned int id = glCreateShader(shader_type);
 		
@@ -160,7 +160,7 @@ namespace gp {
 		return id;
 	}
 	
-	std::string Shader::m_read_source(const std::string& source_path) const {
+	std::string Shader::m_read_source(const std::string& source_path) const noexcept {
 		std::ifstream inf(source_path);
 		
 		// return an empty buffer if the file is unavailable
@@ -177,7 +177,7 @@ namespace gp {
 		return stream.str();
 	}
 	
-	std::string Shader::m_shader_type_string(const unsigned int shader_type) const {
+	std::string Shader::m_shader_type_string(const unsigned int shader_type) const noexcept {
 		switch (shader_type) {
 			case GL_VERTEX_SHADER          : return "vertex";
 			case GL_TESS_CONTROL_SHADER    : return "tessellation control";
@@ -190,7 +190,7 @@ namespace gp {
 		return "[unknown shader type]";
 	}
 	
-	std::string Shader::m_shader_type_string(const Shader_type shader_type) const {
+	std::string Shader::m_shader_type_string(const Shader_type shader_type) const noexcept {
 		switch (shader_type) {
 			case Shader_type::SHADER_TYPE_VERTEX   : return "vertex";
 			case Shader_type::SHADER_TYPE_FRAGMENT : return "fragment";
