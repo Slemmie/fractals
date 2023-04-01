@@ -4,6 +4,7 @@
 #include <glfw/glfw3.h>
 
 #include <thread>
+#include <mutex>
 #include <shared_mutex>
 #include <iostream>
 
